@@ -21,12 +21,11 @@
             <table class="table" id="data">
                 <thead>
                 {% block columns %}
-
                 {% endblock %}
                 </thead>
                 <tbody>
-                {% block rows %}
 
+                {% block rows %}
                 {% endblock %}
                 </tbody>
             </table>
@@ -37,14 +36,12 @@
             </button>
         </div>
     </div>
+
 {%block javascript%}
 <script type="application/javascript">
 $('#data').DataTable({
     responsive: true,
     autoWidth: false, 
-    "language": {
-        url : '{% static 'lib/datatables-1.10.20/spanish.txt' %}'
-    }
 });
 </script>
 {%endblock%}
