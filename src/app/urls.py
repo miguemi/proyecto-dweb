@@ -17,9 +17,10 @@ from django.contrib import admin
 from django.urls import path
 
 from core.base.views.category.views import CategoryListView 
+from core.base.views.inicio.views import Inicio
 
 urlpatterns = [
-    # path('/', 'hola'),
+    path('', Inicio),
     path('admin/', admin.site.urls),
     path('category/list', CategoryListView.as_view())
 ]
