@@ -59,7 +59,7 @@
             e.preventDefault();
             let parameters = $(this).serializeArray();
             $.ajax({
-                url: '{% url 'category:cat_create' %}',
+                url: window.location.pathname,
                 type: 'POST',
                 data: parameters,
                 dataType: 'json'
