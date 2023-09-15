@@ -112,5 +112,5 @@ class CategoryDeleteView(DeleteView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Eliminación de una Categoria'
         context['entity'] = 'Categorias'
-        context['list_url'] = reverse_lazy('erp:category_list')
+        context['list_url'] = reverse_lazy('category:cat_list')
         return context
