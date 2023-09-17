@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     # Libs
     'widget_tweaks',
     # apps
-    'core.base'
+    'core.base',
+    'core.homepage'
 ]
 
 MIDDLEWARE = [

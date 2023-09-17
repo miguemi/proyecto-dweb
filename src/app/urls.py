@@ -15,14 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-
-from core.base.views.category.views import CategoryListView, CategoryCreateView
-from core.base.views.inicio.views import Inicio
+from core.homepage.views import IndexView
 
 app_name = 'alan'
 
 urlpatterns = [
-    path('', Inicio),
+    path('', IndexView.as_view()),
     path('admin/', admin.site.urls),
     path('category/', include('core.base.urls'))
 ]
