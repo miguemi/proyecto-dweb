@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
+from django.contrib.auth.views import LogoutView
 
 
 # class LoginFormView(LoginView):
@@ -19,7 +20,7 @@ from django.views.generic import FormView
 #         return context
 
 
-class LoginFormViewCustom(FormView):
+class LoginCustomFormView(FormView):
     form_class = AuthenticationForm
     template_name = 'login.html'
     success_url = reverse_lazy('category:cat_list')
