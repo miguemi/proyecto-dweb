@@ -1,14 +1,13 @@
 function message_error(obj) {
-    let html = '';
+    var html = '';
     if (typeof (obj) === 'object') {
         html = '<ul style="text-align: left;">';
         $.each(obj, function (key, value) {
             html += '<li>' + key + ': ' + value + '</li>';
         });
         html += '</ul>';
-    }
-    else{
-        html = '<p>'+obj+'</p>';
+    } else {
+        html = '<p>' + obj + '</p>';
     }
     Swal.fire({
         title: 'Error!',
@@ -16,6 +15,7 @@ function message_error(obj) {
         icon: 'error'
     });
 }
+
 function submit_with_ajax(url, title, content, parameters, callback) {
     $.confirm({
         theme: 'material',
@@ -36,7 +36,9 @@ function submit_with_ajax(url, title, content, parameters, callback) {
                         url: url, //window.location.pathname
                         type: 'POST',
                         data: parameters,
-                        dataType: 'json'
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
                     }).done(function (data) {
                         console.log(data);
                         if (!data.hasOwnProperty('error')) {

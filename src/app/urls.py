@@ -17,11 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from core.homepage.views import IndexView
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 app_name = 'alan'
 
 urlpatterns = [
     path('', IndexView.as_view()),
     path('admin/', admin.site.urls),
     path('login/', include('core.login.urls')),
-    path('category/', include('core.base.urls'))
+    path('category/', include('core.base.urls.category_urls')),
+    path('products/', include('core.base.urls.products_urls'))
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
