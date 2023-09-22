@@ -6,14 +6,25 @@ from django.forms import model_to_dict
 from core.base.choices import gender_choices
 
 from app.settings import MEDIA_URL, STATIC_URL
+from core.models import BaseModel
+from crum import get_current_user
 
 
-class Category(models.Model):
+class Category(BaseModel):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
     desc = models.CharField(max_length=500, null=True, blank=True, verbose_name='Descripción')
 
     def __str__(self):
         return self.name
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        user = get_current_user()
+        if user is not None:
+            if not self.pk:
+                self.user_creation = user
+            else:
+                self.user_updated = user
+        super(Category, self).save()
 
     def toJSON(self):
         item = model_to_dict(self)
