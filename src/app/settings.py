@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     # apps
     'core.base',
     'core.homepage',
-    'core.login'
+    'core.login',
+    'core.user'
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,5 @@ LOGOUT_REDIRECT_URL = '/login/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+# cambiar el modelo del usuario.
+AUTH_USER_MODEL = 'user.User'
