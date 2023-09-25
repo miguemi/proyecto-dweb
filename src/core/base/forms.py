@@ -27,7 +27,6 @@ class CategoryForm(ModelForm):
                 }
             ),
         }
-        exclude = ['user_updated', 'user_creation']
 
     def save(self, commit=True):
         data = {}
@@ -54,6 +53,12 @@ class ProductForm(ModelForm):
             'name': TextInput(
                 attrs={
                     'placeholder': 'Ingrese un nombre',
+                }
+            ),
+            'cat': Select(
+                attrs={
+                    'class': 'select2',
+                    'style': 'width: 100%'
                 }
             ),
         }
@@ -98,8 +103,7 @@ class ClientForm(ModelForm):
             'date_birthday': DateInput(format='%Y-%m-%d',
                                        attrs={
                                            'value': datetime.now().strftime('%Y-%m-%d'),
-                                       }
-                                       ),
+                                       }),
             'address': TextInput(
                 attrs={
                     'placeholder': 'Ingrese su dirección',
@@ -107,7 +111,6 @@ class ClientForm(ModelForm):
             ),
             'gender': Select()
         }
-        exclude = ['user_updated', 'user_creation']
 
     def save(self, commit=True):
         data = {}
@@ -120,3 +123,10 @@ class ClientForm(ModelForm):
         except Exception as e:
             data['error'] = str(e)
         return data
+
+    # def clean(self):
+    #     cleaned = super().clean()
+    #     if len(cleaned['name']) <= 50:
+    #         raise forms.ValidationError('Validacion xxx')
+    #         # self.add_error('name', 'Le faltan caracteres')
+    #     return cleaned

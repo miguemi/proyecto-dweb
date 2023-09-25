@@ -23,11 +23,12 @@ from django.conf.urls.static import static
 app_name = 'alan'
 
 urlpatterns = [
-    path('', IndexView.as_view()),
+    path('', IndexView.as_view(), name="index"),
     path('admin/', admin.site.urls),
     path('login/', include('core.login.urls')),
+    path('dashboard', include('core.base.urls.dashboard_urls')),
     path('category/', include('core.base.urls.category_urls')),
-    path('products/', include('core.base.urls.products_urls')),
+    path('product/', include('core.base.urls.products_urls')),
     path('client/', include('core.base.urls.client_urls'))
 ]
 

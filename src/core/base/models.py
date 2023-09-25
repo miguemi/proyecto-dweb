@@ -1,30 +1,19 @@
-from django.db import models
 from datetime import datetime
 
+from django.db import models
 from django.forms import model_to_dict
 
-from core.base.choices import gender_choices
-
 from app.settings import MEDIA_URL, STATIC_URL
+from core.base.choices import gender_choices
 from core.models import BaseModel
-from crum import get_current_user
 
 
-class Category(BaseModel):
+class Category(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
     desc = models.CharField(max_length=500, null=True, blank=True, verbose_name='Descripción')
 
     def __str__(self):
         return self.name
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        user = get_current_user()
-        if user is not None:
-            if not self.pk:
-                self.user_creation = user
-            else:
-                self.user_updated = user
-        super(Category, self).save()
 
     def toJSON(self):
         item = model_to_dict(self)
@@ -38,12 +27,19 @@ class Category(BaseModel):
 
 class Product(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
-    cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoria')
+    cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoría')
     image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True, verbose_name='Imagen')
     pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de venta')
 
     def __str__(self):
         return self.name
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['cat'] = self.cat.toJSON()
+        item['image'] = self.get_image()
+        item['pvp'] = format(self.pvp, '.2f')
+        return item
 
     def get_image(self):
         if self.image:
@@ -72,6 +68,7 @@ class Client(models.Model):
         item['gender'] = {'id': self.gender, 'name': self.get_gender_display()}
         item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
         return item
+
     class Meta:
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'

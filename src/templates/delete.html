@@ -27,14 +27,14 @@
                 {% endif %}
                 <div class="alert alert-danger alert-dismissible">
                     <h5><i class="icon fas fa-ban"></i> Notificación!</h5>
-                    ¿Estas seguro de eliminar el registro nro {{ object.id }}?
+                    ¿Estas seguro de eliminar el registro N°{{ object.id }}?
                 </div>
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-danger btn-flat">
+                <button type="submit" class="btn btn-primary btn-flat">
                     <i class="fas fa-save"></i> Si, aceptar
                 </button>
-                <a href="{{ list_url }}" class="btn btn-secondary btn-flat">
+                <a href="{{ list_url }}" class="btn btn-danger btn-flat">
                     <i class="fas fa-times"></i> Cancelar
                 </a>
             </div>
@@ -43,8 +43,9 @@
     <script>
         $('form').on('submit', function (e) {
             e.preventDefault();
-            const parameters = new FormData(this)
-            submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de eliminar el siguiente registro?', parameters, function () {
+            const parameters = new FormData(this);
+            submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de eliminar el siguiente registro?',
+                parameters, function () {
                 location.href = '{{ list_url }}';
             });
         });

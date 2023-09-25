@@ -1,20 +1,22 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from core.base.forms import CategoryForm
+from core.base.mixins import ValidatePermissionRequiredMixin
 from core.base.models import Category
 
 
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Category
     template_name = 'category/list.html'
+    permission_required = 'base.view_category'
+    url_redirect = reverse_lazy('dashboard:main')
 
     @method_decorator(csrf_exempt)
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -41,13 +43,14 @@ class CategoryListView(ListView):
         return context
 
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'category/create.html'
     success_url = reverse_lazy('category:cat_list')
+    permission_required = 'base.add_category'
+    url_redirect = success_url
 
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -68,18 +71,19 @@ class CategoryCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Creación una Categoria'
         context['entity'] = 'Categorias'
-        context['list_url'] = reverse_lazy('category:cat_list')
+        context['list_url'] = self.success_url
         context['action'] = 'add'
         return context
 
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = 'category/create.html'
     success_url = reverse_lazy('category:cat_list')
+    permission_required = 'base.change_category'
+    url_redirect = success_url
 
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().dispatch(request, *args, **kwargs)
@@ -101,17 +105,18 @@ class CategoryUpdateView(UpdateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Edición una Categoria'
         context['entity'] = 'Categorias'
-        context['list_url'] = reverse_lazy('category:cat_list')
+        context['list_url'] = self.success_url
         context['action'] = 'edit'
         return context
 
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
     model = Category
     template_name = 'category/delete.html'
     success_url = reverse_lazy('category:cat_list')
+    permission_required = 'base.delete_category'
+    url_redirect = success_url
 
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().dispatch(request, *args, **kwargs)
@@ -128,29 +133,5 @@ class CategoryDeleteView(DeleteView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Eliminación de una Categoria'
         context['entity'] = 'Categorias'
-        context['list_url'] = reverse_lazy('category:cat_list')
-        return context
-
-
-class CategoryFormView(FormView):
-    form_class = CategoryForm
-    template_name = 'category/create.html'
-    success_url = reverse_lazy('category:cat_list')
-
-    def form_valid(self, form):
-        print(form.is_valid())
-        print(form)
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        print(form.is_valid())
-        print(form.errors)
-        return super().form_invalid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Form | Categoria'
-        context['entity'] = 'Categorias'
-        context['list_url'] = reverse_lazy('category:cat_list')
-        context['action'] = 'add'
+        context['list_url'] = self.success_url
         return context

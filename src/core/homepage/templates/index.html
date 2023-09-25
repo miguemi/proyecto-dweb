@@ -1,1 +1,18 @@
-{%extends 'layout.html'%}
+{%extends 'home.html'%}
+{% block body %}
+    <style>
+        .content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+    <div class="content">
+        <div class="container text-center ">
+            <h1>Pagina Index - TEMPORAL</h1>
+            <a class="btn btn-primary col-8 mt-5" href="{% url 'security:login' %}">Ir al login</a>
+        </div>
+    </div>
+{% endblock %}
