@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.forms import *
 
-from core.base.models import Category, Product, Client
+from core.base.models import Category, Product, Client, Sale
 
 
 class CategoryForm(ModelForm):
@@ -100,10 +100,9 @@ class ClientForm(ModelForm):
                     'placeholder': 'Ingrese su dni',
                 }
             ),
-            'date_birthday': DateInput(format='%Y-%m-%d',
-                                       attrs={
-                                           'value': datetime.now().strftime('%Y-%m-%d'),
-                                       }),
+            'date_birthday': DateInput(format='%Y-%m-%d',attrs={
+                'value': datetime.now().strftime('%Y-%m-%d'),
+            }),
             'address': TextInput(
                 attrs={
                     'placeholder': 'Ingrese su dirección',
@@ -124,9 +123,39 @@ class ClientForm(ModelForm):
             data['error'] = str(e)
         return data
 
-    # def clean(self):
-    #     cleaned = super().clean()
-    #     if len(cleaned['name']) <= 50:
-    #         raise forms.ValidationError('Validacion xxx')
-    #         # self.add_error('name', 'Le faltan caracteres')
-    #     return cleaned
+
+class SaleForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Sale
+        fields = '__all__'
+        widgets = {
+            'cli': Select(attrs={
+                'class': 'form-control select2',
+                'style': 'width: 100%'
+            }),
+            'date_joined': DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'value': datetime.now().strftime('%Y-%m-%d'),
+                    'autocomplete': 'off',
+                    'class': 'form-control datetimepicker-input',
+                    'id': 'date_joined',
+                    'data-target': '#date_joined',
+                    'data-toggle': 'datetimepicker'
+                }
+            ),
+            'iva': TextInput(attrs={
+                'class': 'form-control',
+            }),
+            'subtotal': TextInput(attrs={
+                'readonly': True,
+                'class': 'form-control',
+            }),
+            'total': TextInput(attrs={
+                'readonly': True,
+                'class': 'form-control',
+            })
+        }
