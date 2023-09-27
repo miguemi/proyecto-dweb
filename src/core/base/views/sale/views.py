@@ -1,22 +1,24 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView
 
 from core.base.forms import SaleForm
 from core.base.mixins import ValidatePermissionRequiredMixin
-from django.views.generic import CreateView
-
-from core.base.models import Sale, Product
+from core.base.models import Sale, Product, DetSale
 
 
 class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
     model = Sale
     form_class = SaleForm
     template_name = 'sale/create.html'
-    success_url = reverse_lazy('index')
-    permission_required = 'erp.add_sale'
+    success_url = reverse_lazy('dashboard:main')
+    permission_required = 'base.add_sale'
     url_redirect = success_url
 
     @method_decorator(csrf_exempt)
@@ -34,6 +36,24 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                     item = i.toJSON()
                     item['value'] = i.name
                     data.append(item)
+            elif action == 'add':
+                with transaction.atomic():
+                    vents = json.loads(request.POST['vents'])
+                    sale = Sale()
+                    sale.date_joined = vents['date_joined']
+                    sale.cli_id = vents['cli']
+                    sale.subtotal = float(vents['subtotal'])
+                    sale.iva = float(vents['iva'])
+                    sale.total = float(vents['total'])
+                    sale.save()
+                    for i in vents['products']:
+                        det = DetSale()
+                        det.sale_id = sale.id
+                        det.prod_id = i['id']
+                        det.cant = int(i['cant'])
+                        det.price = float(i['pvp'])
+                        det.subtotal = float(i['subtotal'])
+                        det.save()
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
