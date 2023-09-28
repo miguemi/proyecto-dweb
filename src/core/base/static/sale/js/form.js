@@ -9,8 +9,8 @@ const vents = {
         products: []
     },
     calculate_invoice: function () {
-        var subtotal = 0.00;
-        var iva = $('input[name="iva"]').val();
+        let subtotal = 0.00;
+        const iva = $('input[name="iva"]').val();
         $.each(this.items.products, function (pos, dict) {
             dict.pos = pos;
             dict.subtotal = dict.cant * parseFloat(dict.pvp);
