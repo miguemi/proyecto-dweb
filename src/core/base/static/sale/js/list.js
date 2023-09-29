@@ -1,8 +1,7 @@
-var tblSale;
+let tblSale;
 
 function format(d) {
-    console.log(d);
-    var html = '<table class="table">';
+    let html = '<table class="table">';
     html += '<thead class="thead-dark">';
     html += '<tr><th scope="col">Producto</th>';
     html += '<th scope="col">Categoría</th>';
@@ -25,9 +24,7 @@ function format(d) {
 }
 
 $(function () {
-
     tblSale = $('#data').DataTable({
-        //responsive: true,
         scrollX: true,
         autoWidth: false,
         destroy: true,
@@ -68,9 +65,9 @@ $(function () {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    var buttons = '<a href="/erp/sale/delete/' + row.id + '/" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a> ';
+                    let buttons = '<a href="/sales/delete/' + row.id + '" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a> ';
+                    buttons += '<a href="/sales/edit/' + row.id + '" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
                     buttons += '<a rel="details" class="btn btn-success btn-xs btn-flat"><i class="fas fa-search"></i></a> ';
-                    //var buttons = '<a href="/erp/sale/update/' + row.id + '/" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
                     return buttons;
                 }
             },
@@ -82,9 +79,8 @@ $(function () {
 
     $('#data tbody')
         .on('click', 'a[rel="details"]', function () {
-            var tr = tblSale.cell($(this).closest('td, li')).index();
-            var data = tblSale.row(tr.row).data();
-            console.log(data);
+            const tr = tblSale.cell($(this).closest('td, li')).index();
+            const data = tblSale.row(tr.row).data();
 
             $('#tblDet').DataTable({
                 responsive: true,
@@ -132,8 +128,8 @@ $(function () {
             $('#myModelDet').modal('show');
         })
         .on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = tblSale.row(tr);
+            const tr = $(this).closest('tr');
+            const row = tblSale.row(tr);
             if (row.child.isShown()) {
                 row.child.hide();
                 tr.removeClass('shown');
@@ -142,5 +138,4 @@ $(function () {
                 tr.addClass('shown');
             }
         });
-
 });

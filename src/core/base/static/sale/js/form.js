@@ -117,8 +117,7 @@ $(function () {
         postfix: '%'
     }).on('change', function () {
         vents.calculate_invoice();
-    })
-        .val(0.12);
+    }).val(0.12);
 
     // search products
 
@@ -198,9 +197,8 @@ $(function () {
         parameters.append('action', $('input[name="action"]').val());
         parameters.append('vents', JSON.stringify(vents.items));
         submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
-            location.href = '/dashboard';
+            location.href = '/sales/list';
         });
     });
-
     vents.list();
 });
