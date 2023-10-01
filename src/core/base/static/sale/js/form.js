@@ -140,41 +140,7 @@ $(function () {
         postfix: '%'
     }).on('change', function () {
         vents.calculate_invoice();
-    })
-        .val(0.12);
-
-    // search products
-
-    /*$('input[name="search"]').autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: window.location.pathname,
-                type: 'POST',
-                data: {
-                    'action': 'search_products',
-                    'term': request.term
-                },
-                dataType: 'json',
-            }).done(function (data) {
-                response(data);
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                //alert(textStatus + ': ' + errorThrown);
-            }).always(function (data) {
-
-            });
-        },
-        delay: 500,
-        minLength: 1,
-        select: function (event, ui) {
-            event.preventDefault();
-            console.clear();
-            ui.item.cant = 1;
-            ui.item.subtotal = 0.00;
-            console.log(vents.items);
-            vents.add(ui.item);
-            $(this).val('');
-        }
-    });*/
+    }).val(0.12);
 
     $('.btnRemoveAll').on('click', function () {
         if (vents.items.products.length === 0) return false;
@@ -220,8 +186,15 @@ $(function () {
         const parameters = new FormData();
         parameters.append('action', $('input[name="action"]').val());
         parameters.append('vents', JSON.stringify(vents.items));
-        submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
-            location.href = '/sales/list';
+        submit_with_ajax(window.location.pathname, 'Notificación',
+            '¿Estas seguro de realizar la siguiente acción?', parameters,
+            function (response) {
+                alert_action('Notificación', '¿Desea imprimir la boleta de venta?', function () {
+                    window.open('/sales/invoice/pdf/' + response.id, '_blank');
+                    location.href = '/sales/list';
+                }, function () {
+                    location.href = '/sales/list';
+                });
         });
     });
 

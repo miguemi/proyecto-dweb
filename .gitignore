@@ -2,3 +2,4 @@ v_env/
 env/
 .idea/
 src/media/
+src/staticfiles/
