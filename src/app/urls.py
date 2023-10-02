@@ -30,7 +30,8 @@ urlpatterns = [
     path('category/', include('core.base.urls.category_urls')),
     path('product/', include('core.base.urls.products_urls')),
     path('client/', include('core.base.urls.client_urls')),
-    path('sales/', include('core.base.urls.sale_urls'))
+    path('sales/', include('core.base.urls.sale_urls')),
+    path('reports/', include('core.reports.urls'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
