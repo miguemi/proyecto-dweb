@@ -13,7 +13,7 @@ from core.base.models import Client
 class ClientListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Client
     template_name = 'client/list.html'
-    permission_required = 'base.view_client'
+    permission_required = 'view_client'
     url_redirect = reverse_lazy('dashboard:main')
 
     @method_decorator(csrf_exempt)
@@ -48,7 +48,7 @@ class ClientCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Crea
     form_class = ClientForm
     template_name = 'client/create.html'
     success_url = reverse_lazy('client:cl_list')
-    permission_required = 'base.add_client'
+    permission_required = 'add_client'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -81,7 +81,7 @@ class ClientUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Upda
     form_class = ClientForm
     template_name = 'client/create.html'
     success_url = reverse_lazy('client:cl_list')
-    permission_required = 'base.change_client'
+    permission_required = 'change_client'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -114,7 +114,7 @@ class ClientDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Dele
     model = Client
     template_name = 'client/delete.html'
     success_url = reverse_lazy('client:cl_list')
-    permission_required = 'base.delete_client'
+    permission_required = 'delete_client'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):

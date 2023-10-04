@@ -140,3 +140,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # cambiar el modelo del usuario.
 AUTH_USER_MODEL = 'user.User'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

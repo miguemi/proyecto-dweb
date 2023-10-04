@@ -13,7 +13,7 @@ from core.base.models import Category
 class CategoryListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Category
     template_name = 'category/list.html'
-    permission_required = 'base.view_category'
+    permission_required = 'view_category'
     url_redirect = reverse_lazy('dashboard:main')
 
     @method_decorator(csrf_exempt)
@@ -48,7 +48,7 @@ class CategoryCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Cr
     form_class = CategoryForm
     template_name = 'category/create.html'
     success_url = reverse_lazy('category:cat_list')
-    permission_required = 'base.add_category'
+    permission_required = 'add_category'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -81,7 +81,7 @@ class CategoryUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Up
     form_class = CategoryForm
     template_name = 'category/create.html'
     success_url = reverse_lazy('category:cat_list')
-    permission_required = 'base.change_category'
+    permission_required = 'change_category'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -114,7 +114,7 @@ class CategoryDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, De
     model = Category
     template_name = 'category/delete.html'
     success_url = reverse_lazy('category:cat_list')
-    permission_required = 'base.delete_category'
+    permission_required = 'delete_category'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
