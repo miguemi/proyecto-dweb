@@ -2,7 +2,7 @@
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-dark navbar-primary">
     <div class="container">
-        <a href="/" class="navbar-brand">
+        <a href="{% url 'dashboard:main' %}" class="navbar-brand">
             <img src="{% static 'img/logo.png' %}" alt="AdminLTE Logo"
                  class="brand-image"
                  style="opacity: .8">
@@ -24,7 +24,9 @@
                         <li><a href="{% url 'category:cat_list' %}" class="dropdown-item"><i class="fas fa-truck-loading"></i> Categorías</a></li>
                         <li><a href="{% url 'products:prod_list' %}" class="dropdown-item"><i class="fas fa-boxes"></i> Productos</a></li>
                         <li><a href="{% url 'client:cl_list' %}" class="dropdown-item"><i class="fas fa-users"></i> Clientes</a></li>
-                        <li><a href="#" class="dropdown-item"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
+                        <li><a href="{% url 'sales:sale_list' %}" class="dropdown-item"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
+                        <li><a href="{% url 'reports:report_sales' %}" class="dropdown-item"><i class="fas fa-chart-bar"></i> Reporte de Ventas</a></li>
+                        <li><a href="{% url 'user:user_list' %}" class="dropdown-item"><i class="fas fa-user-friends"></i> Usuarios</a></li>
                     </ul>
                 </li>
             </ul>
