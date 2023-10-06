@@ -2,7 +2,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SQLITE={
+SQLITE = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db/sqlite/db.sqlite3')
@@ -10,13 +10,12 @@ SQLITE={
 }
 
 POSTGRESQL = {
-    'default':{
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db',
-        'USER': 'postgres',
-        'PASSWORD': 'alandavid321',
+        'NAME': 'root',
+        'USER': 'root',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': 5432
     }
 }
-

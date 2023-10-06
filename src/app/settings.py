@@ -141,3 +141,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # cambiar el modelo del usuario.
 AUTH_USER_MODEL = 'user.User'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+# email
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = 'a5d67cb282f920'
+EMAIL_HOST_PASSWORD = 'd5a1cdb876a61a'
+EMAIL_PORT = '2525'
