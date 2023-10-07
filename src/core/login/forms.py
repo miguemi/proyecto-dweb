@@ -21,3 +21,25 @@ class ResetPasswordForm(forms.Form):
     def get_user(self):
         username = self.cleaned_data.get('username')
         return User.objects.get(username=username)
+
+
+class ChangePasswordForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'placeholder': 'Ingrese un password',
+        'class': 'form-control',
+        'autocomplete': 'off'
+    }))
+
+    confirmPassword = forms.CharField(widget=forms.PasswordInput(attrs={
+        'placeholder': 'Repita el password',
+        'class': 'form-control',
+        'autocomplete': 'off'
+    }))
+
+    def clean(self):
+        cleaned = super().clean()
+        password = cleaned['password']
+        confirm_password = cleaned['confirmPassword']
+        if password != confirm_password:
+            raise forms.ValidationError('Las contraseñas deben ser iguales')
+        return cleaned
