@@ -1,4 +1,5 @@
 let tblProducts;
+let tblSearchProducts;
 const vents = {
     items: {
         cli: '',
@@ -98,6 +99,10 @@ function formatRepo(repo) {
         return repo.text;
     }
 
+    if (!Number.isInteger(repo.id)) {
+        return repo.text;
+    }
+
     return $(
         '<div class="wrapper container">' +
         '<div class="row">' +
@@ -189,7 +194,6 @@ $(function () {
             });
     });
 
-
     $('.btnRemoveAll').on('click', function () {
         if (vents.items.products.length === 0) return false;
         alert_action('Notificación', '¿Estas seguro de eliminar todos los items de tu detalle?', function () {
@@ -225,6 +229,70 @@ $(function () {
         $('input[name="search"]').val('').focus();
     });
 
+    $('.btnSearchProducts').on('click', function () {
+        tblSearchProducts = $('#tblSearchProducts').DataTable({
+            responsive: true,
+            autoWidth: false,
+            destroy: true,
+            deferRender: true,
+            ajax: {
+                url: window.location.pathname,
+                type: 'POST',
+                data: {
+                    'action': 'search_products',
+                    'term': $('select[name="search"]').val()
+                },
+                dataSrc: ""
+            },
+            columns: [
+                {"data": "name"},
+                {"data": "cat.name"},
+                {"data": "image"},
+                {"data": "pvp"},
+                {"data": "id"},
+            ],
+            columnDefs: [
+                {
+                    targets: [-3],
+                    class: 'text-center',
+                    orderable: false,
+                    render: function (data, type, row) {
+                        return '<img src="' + data + '" class="img-fluid d-block mx-auto" style="width: 20px; height: 20px;" alt="">';
+                    }
+                },
+                {
+                    targets: [-2],
+                    class: 'text-center',
+                    orderable: false,
+                    render: function (data, type, row) {
+                        return '$' + parseFloat(data).toFixed(2);
+                    }
+                },
+                {
+                    targets: [-1],
+                    class: 'text-center',
+                    orderable: false,
+                    render: function (data, type, row) {
+                        return '<a rel="add" class="btn btn-success btn-xs btn-flat"><i class="fas fa-plus"></i></a> ';
+                    }
+                },
+            ],
+            initComplete: function (settings, json) {
+
+            }
+        });
+        $('#myModalSearchProducts').modal('show');
+    });
+
+    $('#tblSearchProducts tbody')
+        .on('click', 'a[rel="add"]', function () {
+            const tr = tblSearchProducts.cell($(this).closest('td, li')).index();
+            const product = tblSearchProducts.row(tr.row).data();
+            product.cant = 1;
+            product.subtotal = 0.00;
+            vents.add(product);
+        });
+
     // event submit
     $('#frmSale').on('submit', function (e) {
         e.preventDefault();
@@ -241,12 +309,10 @@ $(function () {
         parameters.append('vents', JSON.stringify(vents.items));
         submit_with_ajax(window.location.pathname, 'Notificación',
             '¿Estas seguro de realizar la siguiente acción?', parameters, function (response) {
-
                 alert_action('Notificación', '¿Desea imprimir la boleta de venta?', function () {
-                    window.open('/sales/invoice/pdf/' + response.id , '_blank');
+                    window.open('/sales/invoice/pdf/' + response.id, '_blank');
                     location.href = '/sales/list';
                 }, function () {
-                    console.log("xdxxd")
                     location.href = '/sales/list';
                 });
             });
@@ -263,7 +329,7 @@ $(function () {
             data: function (params) {
                 return {
                     term: params.term,
-                    action: 'search_products'
+                    action: 'search_autocomplete'
                 };
             },
             processResults: function (data) {
@@ -277,12 +343,17 @@ $(function () {
         templateResult: formatRepo,
     }).on('select2:select', function (e) {
         const data = e.params.data;
+        if(!Number.isInteger(data.id)){
+            return false;
+        }
         data.cant = 1;
         data.subtotal = 0.00;
         vents.add(data);
         $(this).val('').trigger('change.select2');
     });
 
+    // Esto se puso aqui para que funcione bien el editar y calcule bien los valores del iva. // sino tomaría el valor del iva de la base debe
+    // coger el que pusimos al inicializarlo.
     vents.list();
 });
 
