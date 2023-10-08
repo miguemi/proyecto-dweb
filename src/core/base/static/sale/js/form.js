@@ -142,11 +142,61 @@ $(function () {
         vents.calculate_invoice();
     }).val(0.12);
 
+    // search clients
+
+    $('select[name="cli"]').select2({
+        theme: "bootstrap4",
+        language: 'es',
+        allowClear: true,
+        ajax: {
+            delay: 250,
+            type: 'POST',
+            url: window.location.pathname,
+            data: function (params) {
+                return {
+                    term: params.term,
+                    action: 'search_clients'
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+        },
+        placeholder: 'Ingrese una descripción',
+        minimumInputLength: 1,
+    });
+
+    $('.btnAddClient').on('click', function () {
+        $('#myModalClient').modal('show');
+    });
+
+    $('#myModalClient').on('hidden.bs.modal', function (e) {
+        $('#frmClient').trigger('reset');
+    })
+
+    $('#frmClient').on('submit', function (e) {
+        e.preventDefault();
+        const parameters = new FormData(this);
+        parameters.append('action', 'create_client');
+        submit_with_ajax(window.location.pathname, 'Notificación',
+            '¿Estas seguro de crear al siguiente cliente?', parameters, function (response) {
+                //console.log(response);
+                const newOption = new Option(response.full_name, response.id, false, true);
+                $('select[name="cli"]').append(newOption).trigger('change');
+                $('#myModalClient').modal('hide');
+            });
+    });
+
+
     $('.btnRemoveAll').on('click', function () {
         if (vents.items.products.length === 0) return false;
         alert_action('Notificación', '¿Estas seguro de eliminar todos los items de tu detalle?', function () {
             vents.items.products = [];
             vents.list();
+        }, function () {
+
         });
     });
 
@@ -154,10 +204,13 @@ $(function () {
     $('#tblProducts tbody')
         .on('click', 'a[rel="remove"]', function () {
             const tr = tblProducts.cell($(this).closest('td, li')).index();
-            alert_action('Notificación', '¿Estas seguro de eliminar el producto de tu detalle?', function () {
-                vents.items.products.splice(tr.row, 1);
-                vents.list();
-            });
+            alert_action('Notificación', '¿Estas seguro de eliminar el producto de tu detalle?',
+                function () {
+                    vents.items.products.splice(tr.row, 1);
+                    vents.list();
+                }, function () {
+
+                });
         })
         .on('change', 'input[name="cant"]', function () {
             console.clear();
@@ -173,7 +226,7 @@ $(function () {
     });
 
     // event submit
-    $('form').on('submit', function (e) {
+    $('#frmSale').on('submit', function (e) {
         e.preventDefault();
 
         if (vents.items.products.length === 0) {
@@ -187,15 +240,16 @@ $(function () {
         parameters.append('action', $('input[name="action"]').val());
         parameters.append('vents', JSON.stringify(vents.items));
         submit_with_ajax(window.location.pathname, 'Notificación',
-            '¿Estas seguro de realizar la siguiente acción?', parameters,
-            function (response) {
+            '¿Estas seguro de realizar la siguiente acción?', parameters, function (response) {
+
                 alert_action('Notificación', '¿Desea imprimir la boleta de venta?', function () {
-                    window.open('/sales/invoice/pdf/' + response.id, '_blank');
+                    window.open('/sales/invoice/pdf/' + response.id , '_blank');
                     location.href = '/sales/list';
                 }, function () {
+                    console.log("xdxxd")
                     location.href = '/sales/list';
                 });
-        });
+            });
     });
 
     $('select[name="search"]').select2({
@@ -203,7 +257,7 @@ $(function () {
         language: 'es',
         allowClear: true,
         ajax: {
-            delay: 100,
+            delay: 250,
             type: 'POST',
             url: window.location.pathname,
             data: function (params) {
@@ -228,5 +282,7 @@ $(function () {
         vents.add(data);
         $(this).val('').trigger('change.select2');
     });
+
     vents.list();
 });
+

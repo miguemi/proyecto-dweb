@@ -40,6 +40,7 @@ function submit_with_ajax(url, title, content, parameters, callback) {
                         processData: false,
                         contentType: false,
                     }).done(function (data) {
+                        console.log(data);
                         if (!data.hasOwnProperty('error')) {
                             callback(data);
                             return false;
@@ -56,13 +57,14 @@ function submit_with_ajax(url, title, content, parameters, callback) {
                 text: "No",
                 btnClass: 'btn-red',
                 action: function () {
+
                 }
             },
         }
     })
 }
 
-function alert_action(title, content, callback) {
+function alert_action(title, content, callback, cancel) {
     $.confirm({
         theme: 'material',
         title: title,
@@ -85,7 +87,7 @@ function alert_action(title, content, callback) {
                 text: "No",
                 btnClass: 'btn-red',
                 action: function () {
-
+                    cancel();
                 }
             },
         }
