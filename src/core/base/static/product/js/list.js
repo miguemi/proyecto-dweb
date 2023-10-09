@@ -17,16 +17,25 @@ $(function () {
             {"data": "name"},
             {"data": "cat.name"},
             {"data": "image"},
+            {"data": "stock"},
             {"data": "pvp"},
             {"data": "id"},
         ],
         columnDefs: [
             {
+                targets: [-4],
+                class: 'text-center',
+                orderable: false,
+                render: function (data, type, row) {
+                    return '<img src="'+data+'" class="img-fluid d-block mx-auto" style="width: 20px; height: 20px;" alt="">';
+                }
+            },
+            {
                 targets: [-3],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    return '<img src="'+data+'" class="img-fluid d-block mx-auto" style="width: 20px; height: 20px;" alt="none">';
+                    return `<span class="badge ${row.stock > 0 ? "badge-success" : "badge-danger"}">${data}</span>`
                 }
             },
             {
@@ -42,8 +51,9 @@ $(function () {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    return `<a href="/product/edit/${row.id}" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> 
-                            <a href="/product/delete/${row.id}" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a>`;
+                    var buttons = '<a href="/product/edit/' + row.id + '" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
+                    buttons += '<a href="/product/delete/' + row.id + '" type="button" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a>';
+                    return buttons;
                 }
             },
         ],
