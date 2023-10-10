@@ -75,7 +75,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
             if action == 'search_products':
                 data = []
                 term = request.POST['term'].strip()
-                products = Product.objects.filter()
+                products = Product.objects.filter(stock__gt=0)
                 if len(term):
                     products = products.filter(name__icontains=term)
                 for i in products[0:10]:
@@ -85,8 +85,8 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
             elif action == 'search_autocomplete':
                 data = []
                 term = request.POST['term'].strip()
-                data.append({'id': term, 'text':term})
-                products = Product.objects.filter(name__icontains=term)
+                data.append({'id': term, 'text': term})
+                products = Product.objects.filter(name__icontains=term, stock__gt=0)
                 for i in products[0:10]:
                     item = i.toJSON()
                     item['text'] = i.name
@@ -109,6 +109,10 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                         det.price = float(i['pvp'])
                         det.subtotal = float(i['subtotal'])
                         det.save()
+
+                        det.prod.stock -= det.cant
+                        det.prod.save()
+
                     data = {'id': sale.id}
             elif action == 'search_clients':
                 data = []
@@ -167,7 +171,7 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
             if action == 'search_products':
                 data = []
                 term = request.POST['term'].strip()
-                products = Product.objects.filter()
+                products = Product.objects.filter(stock__gt=0)
                 if len(term):
                     products = products.filter(name__icontains=term)
                 for i in products[0:10]:
@@ -179,7 +183,7 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                 data = []
                 term = request.POST['term'].strip()
                 data.append({'id': term, 'text': term})
-                products = Product.objects.filter(name__icontains=term)
+                products = Product.objects.filter(name__icontains=term, stock__gt=0)
                 for i in products[0:10]:
                     item = i.toJSON()
                     item['text'] = i.name
@@ -204,6 +208,8 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                         det.price = float(i['pvp'])
                         det.subtotal = float(i['subtotal'])
                         det.save()
+                        det.prod.stock -= det.cant
+                        det.prod.save()
                     data = {'id': sale.id}
             elif action == 'search_clients':
                 data = []
