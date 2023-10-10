@@ -9,6 +9,13 @@ const vents = {
         total: 0.00,
         products: []
     },
+    get_ids: function () {
+        const ids = [];
+        $.each(this.items.products, function (key, value) {
+            ids.push(value.id);
+        });
+        return ids;
+    },
     calculate_invoice: function () {
         let subtotal = 0.00;
         const iva = $('input[name="iva"]').val();
@@ -49,7 +56,7 @@ const vents = {
                     targets: [-4],
                     class: 'text-center',
                     render: function (data, type, row) {
-                        return '<span class="badge badge-secondary">'+data+'</span>';
+                        return '<span class="badge badge-secondary">' + data + '</span>';
                     }
                 },
                 {
@@ -110,7 +117,6 @@ function formatRepo(repo) {
         return repo.text;
     }
 
-
     return $(
         '<div class="wrapper container">' +
         '<div class="row">' +
@@ -153,7 +159,8 @@ $(function () {
         postfix: '%'
     }).on('change', function () {
         vents.calculate_invoice();
-    }).val(0.12);
+    })
+        .val(0.12);
 
     // search clients
 
@@ -195,12 +202,12 @@ $(function () {
         parameters.append('action', 'create_client');
         submit_with_ajax(window.location.pathname, 'Notificación',
             '¿Estas seguro de crear al siguiente cliente?', parameters, function (response) {
-                //console.log(response);
                 const newOption = new Option(response.full_name, response.id, false, true);
                 $('select[name="cli"]').append(newOption).trigger('change');
                 $('#myModalClient').modal('hide');
             });
     });
+
 
     $('.btnRemoveAll').on('click', function () {
         if (vents.items.products.length === 0) return false;
@@ -225,7 +232,6 @@ $(function () {
                 });
         })
         .on('change', 'input[name="cant"]', function () {
-            console.clear();
             const cant = parseInt($(this).val());
             const tr = tblProducts.cell($(this).closest('td, li')).index();
             vents.items.products[tr.row].cant = cant;
@@ -248,6 +254,7 @@ $(function () {
                 type: 'POST',
                 data: {
                     'action': 'search_products',
+                    'ids': JSON.stringify(vents.get_ids()),
                     'term': $('select[name="search"]').val()
                 },
                 dataSrc: ""
@@ -272,7 +279,7 @@ $(function () {
                     targets: [-3],
                     class: 'text-center',
                     render: function (data, type, row) {
-                        return '<span class="badge badge-secondary">'+data+'</span>';
+                        return '<span class="badge badge-secondary">' + data + '</span>';
                     }
                 },
                 {
@@ -306,6 +313,7 @@ $(function () {
             product.cant = 1;
             product.subtotal = 0.00;
             vents.add(product);
+            tblSearchProducts.row($(this).parents('tr')).remove().draw();
         });
 
     // event submit
@@ -344,7 +352,8 @@ $(function () {
             data: function (params) {
                 return {
                     term: params.term,
-                    action: 'search_autocomplete'
+                    action: 'search_autocomplete',
+                    ids: JSON.stringify(vents.get_ids())
                 };
             },
             processResults: function (data) {
@@ -358,7 +367,7 @@ $(function () {
         templateResult: formatRepo,
     }).on('select2:select', function (e) {
         const data = e.params.data;
-        if(!Number.isInteger(data.id)){
+        if (!Number.isInteger(data.id)) {
             return false;
         }
         data.cant = 1;
@@ -367,8 +376,6 @@ $(function () {
         $(this).val('').trigger('change.select2');
     });
 
-    // Esto se puso aqui para que funcione bien el editar y calcule bien los valores del iva. // sino tomaría el valor del iva de la base debe
-    // coger el que pusimos al inicializarlo.
     vents.list();
 });
 
