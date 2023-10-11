@@ -1,18 +1,36 @@
-{%extends 'home.html'%}
-{% block body %}
-    <style>
-        .content {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-        }
-    </style>
-    <div class="content">
-        <div class="container text-center ">
-            <h1>Pagina Index - TEMPORAL</h1>
-            <a class="btn btn-primary col-8 mt-5" href="{% url 'security:login' %}">Ir al login</a>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Inicio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'css/home-page-style.css' %}" rel="stylesheet">
+  </head>
+  <body>
+    <div class="layout">
+      <!-- video -->
+      <video autoplay loop muted class="back-video">
+        <source src='{% static 'img/video.mp4' %}' type="video/mp4">
+      </video>
+      <!-- main -->
+      <main>
+        <div class="content">
+          <div class="info">
+            <h1>Sistema de ventas</h1>
+            <a href="{% url 'security:login' %}">Ingresar al dashboard</a>
+          </div>
         </div>
+      </main>
+      <!-- footer -->
+      <div class="custom-footer">
+        <footer>
+          <p>Alan David González López</p>
+          <a href="https://github.com/alanfvn/Proyecto-Desarollo-Web" target="_blank">
+            Desarrollo Web - Proyecto 2022
+          </a>
+        </footer>
+      </div>
     </div>
-{% endblock %}
+  </body>
+</html>
