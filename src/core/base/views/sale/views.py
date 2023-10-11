@@ -1,3 +1,4 @@
+
 import json
 import os
 
@@ -5,20 +6,18 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Q
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from xhtml2pdf import pisa
+from django.views.generic import CreateView, ListView, DeleteView, UpdateView, View
+from weasyprint import HTML, CSS
 
 from core.base.forms import SaleForm, ClientForm
 from core.base.mixins import ValidatePermissionRequiredMixin
-from django.views.generic import CreateView, ListView, DeleteView, UpdateView
-
 from core.base.models import Sale, Product, DetSale, Client
-
 
 class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Sale
@@ -89,7 +88,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                 data = []
                 ids_exclude = json.loads(request.POST['ids'])
                 term = request.POST['term'].strip()
-                data.append({'id': term, 'text':term})
+                data.append({'id': term, 'text': term})
                 products = Product.objects.filter(name__icontains=term, stock__gt=0)
                 for i in products.exclude(id__in=ids_exclude)[0:10]:
                     item = i.toJSON()
@@ -188,7 +187,7 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                 data = []
                 ids_exclude = json.loads(request.POST['ids'])
                 term = request.POST['term'].strip()
-                data.append({'id': term, 'text':term})
+                data.append({'id': term, 'text': term})
                 products = Product.objects.filter(name__icontains=term, stock__gt=0)
                 for i in products.exclude(id__in=ids_exclude)[0:10]:
                     item = i.toJSON()
@@ -287,46 +286,56 @@ class SaleDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Delete
 
 class SaleInvoicePdfView(View):
 
-    def link_callback(self, uri, rel):
-        """
-        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
-        resources
-        """
-        # use short variable names
-        sUrl = settings.STATIC_URL  # Typically /static/
-        sRoot = settings.STATIC_ROOT  # Typically /home/userX/project_static/
-        mUrl = settings.MEDIA_URL  # Typically /static/media/
-        mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
+    @staticmethod
+    def link_callback(uri, rel):
+
+        s_url = settings.STATIC_URL  # Typically /static/
+        s_root = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+        m_url = settings.MEDIA_URL  # Typically /static/media/
+        m_root = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
 
         # convert URIs to absolute system paths
-        if uri.startswith(mUrl):
-            path = os.path.join(mRoot, uri.replace(mUrl, ""))
-        elif uri.startswith(sUrl):
-            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        if uri.startswith(m_url):
+            path = os.path.join(m_root, uri.replace(m_url, ""))
+        elif uri.startswith(s_url):
+            path = os.path.join(s_root, uri.replace(s_url, ""))
         else:
             return uri  # handle absolute uri (ie: http://some.tld/foo.png)
 
-        # make sure that file exists
         if not os.path.isfile(path):
-            raise Exception('media URI must start with %s or %s' % (sUrl, mUrl))
+            raise Exception('media URI must start with %s or %s' % (s_url, m_url))
         return path
 
     def get(self, request, *args, **kwargs):
+        # try:
+        #     template = get_template('sale/invoice.html')
+        #     context = {
+        #         'sale': Sale.objects.get(pk=self.kwargs['pk']),
+        #         'comp': {'name': 'ALGORISOFT S.A.', 'ruc': '123456789', 'address': 'Cobán, Guatemala'},
+        #         'icon': '{}{}'.format(settings.STATIC_URL, 'img/logo.png')
+        #     }
+        #     html = template.render(context)
+        #     response = HttpResponse(content_type='application/pdf')
+        #     pisa.CreatePDF(
+        #         html, dest=response,
+        #         link_callback=self.link_callback
+        #     )
+        #     return response
+        # except Exception as e:
+        #     print(e)
+
         try:
-            template = get_template('sale/invoice.html')
+            template = get_template('sale/invoice-weasy.html')
             context = {
                 'sale': Sale.objects.get(pk=self.kwargs['pk']),
-                'comp': {'name': 'ALGORISOFT S.A.', 'ruc': '123456789', 'address': 'Cobán, Guatemala'},
+                'comp': {'name': 'Alan David Gonzalez Lopez', 'ruc': '287900711', 'address': 'Cobán, Guatemala'},
                 'icon': '{}{}'.format(settings.STATIC_URL, 'img/logo.png')
             }
             html = template.render(context)
-            response = HttpResponse(content_type='application/pdf')
-            pisaStatus = pisa.CreatePDF(
-                html, dest=response,
-                link_callback=self.link_callback
-            )
-            return response
-        except Exception as e:
-            print(e)
-            pass
+            css_url = os.path.join(settings.BASE_DIR, 'static/lib/bootstrap-4.4.1-dist/css/bootstrap.min.css')
+            pdf = HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(stylesheets=[CSS(css_url)])
+            return HttpResponse(pdf, content_type='application/pdf')
+        except Exception as ex:
+            print(ex)
+
         return HttpResponseRedirect(reverse_lazy('sales:sale_list'))

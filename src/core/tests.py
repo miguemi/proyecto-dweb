@@ -1,12 +1,14 @@
 from app.wsgi import *
+from app import settings
+
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from django.template.loader import render_to_string
-
-from app import settings
 from core.user.models import User
+from django.template.loader import get_template
+from weasyprint import HTML, CSS
 
 
 def send_email():
@@ -20,7 +22,6 @@ def send_email():
 
         email_to = 'agonzalezl22@miumg.edu.gt'
 
-        # Construimos el message simple
         message = MIMEMultipart()
         message['From'] = settings.EMAIL_HOST_USER
         message['To'] = email_to
@@ -34,4 +35,13 @@ def send_email():
         print(e)
 
 
-send_email()
+def print_ticket():
+    template = get_template("ticket.html")
+    context = {"name": "William Jair Dávila Vargas"}
+    html_template = template.render(context)
+    css_url = os.path.join(settings.BASE_DIR, 'static/lib/bootstrap-4.4.1-dist/css/bootstrap.min.css')
+    HTML(string=html_template).write_pdf(target="ticket.pdf", stylesheets=[CSS(css_url)])
+
+
+print_ticket()
+# send_email()
