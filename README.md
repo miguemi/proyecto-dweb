@@ -1,6 +1,6 @@
 # Proyecto - Desarrollo Web
 
-Proyecto final del curso Desarrollo Web basado en la siguient.
+Proyecto final del curso Desarrollo Web basado en la siguiente:
 [serie de videos](https://youtube.com/playlist?list=PLxm9hnvxnn-j5ZDOgQS63UIBxQytPdCG7).
 
 ## 1. Dependencias
