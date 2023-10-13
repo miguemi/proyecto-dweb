@@ -1,5 +1,6 @@
-env/
+virtual_env/
 .idea/
 src/media/
 src/staticfiles/
-**/__pycache__
+**/__pycache__/
+*.pyc
