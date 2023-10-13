@@ -100,8 +100,9 @@ class ClientForm(ModelForm):
                     'placeholder': 'Ingrese su dni',
                 }
             ),
-            'date_birthday': DateInput(format='%Y-%m-%d',attrs={
-                'value': datetime.now().strftime('%Y-%m-%d'),
+            'date_birthday': DateInput(format='%Y-%m-%d', attrs={
+                'type': "date",
+                'value': datetime.now().strftime('%Y-%m-%d')
             }),
             'address': TextInput(
                 attrs={
