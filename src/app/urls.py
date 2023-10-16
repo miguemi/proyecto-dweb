@@ -20,7 +20,7 @@ from core.homepage.views import IndexView
 from django.conf import settings
 from django.conf.urls.static import static
 
-app_name = 'alan'
+app_name = 'miguel'
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),

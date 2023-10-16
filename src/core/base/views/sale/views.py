@@ -328,7 +328,7 @@ class SaleInvoicePdfView(View):
             template = get_template('sale/invoice-weasy.html')
             context = {
                 'sale': Sale.objects.get(pk=self.kwargs['pk']),
-                'comp': {'name': 'Alan David Gonzalez Lopez', 'ruc': '287900711', 'address': 'Cobán, Guatemala'},
+                'comp': {'name': 'Manuel Miguel Miguel', 'ruc': '287900711', 'address': 'Cobán, Guatemala'},
                 'icon': '{}{}'.format(settings.STATIC_URL, 'img/logo.png')
             }
             html = template.render(context)
