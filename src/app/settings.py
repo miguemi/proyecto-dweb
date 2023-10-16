@@ -23,12 +23,12 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%jfg0*gz2yo6m1i+qyyqh)-q6ev@m1v6bvndh*divz16%7iqb+'
+SECRET_KEY = os.environ.get("SECRET_KEY", default='django-insecure-%jfg0*gz2yo6m1i+qyyqh)-q6ev@m1v6bvndh*divz16%7iqb+')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -143,9 +143,9 @@ AUTH_USER_MODEL = 'user.User'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # email
-EMAIL_HOST = 'smtp.mailtrap.io'
-EMAIL_HOST_USER = 'a5d67cb282f920'
-EMAIL_HOST_PASSWORD = 'd5a1cdb876a61a'
-EMAIL_PORT = '2525'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'mmiguelm2@miumg.edu.gt'
+EMAIL_HOST_PASSWORD = 'hqfnfccdpqhgvzxj'
+EMAIL_PORT = '587'
 
 DOMAIN = ''
