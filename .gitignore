@@ -1,6 +1,14 @@
-virtual_env/
+virtualenv/
 .idea/
 src/media/
 src/staticfiles/
 **/__pycache__/
 *.pyc
+# Ignore Node.js modules
+node_modules/
+env
+# Ignore line ending (CRLF/LF) warnings
+package-lock.json
+package.json
+docker-compose.yml
+src/Dockerfile

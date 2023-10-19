@@ -16,58 +16,49 @@
                 <a href="#" class="d-block">{{ request.user.username }}</a>
             </div>
         </div>
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-header">Mantenimientos</li>
+        <nav class="mt-8">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <h6 class="nav-header">Mantenimientos</h6>
+                </li>
                 <li class="nav-item">
                     <a href="{% url 'category:cat_list' %}" class="nav-link">
-                        <i class="nav-icon fas fa-truck-loading"></i>
-                        <p>
-                            Categorías
-                        </p>
+                        <i class="fas fa-box me-2 text-primary"></i>
+                        Categorías
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'products:prod_list' %}" class="nav-link">
-                        <i class="nav-icon fas fa-boxes"></i>
-                        <p>
-                            Productos
-                        </p>
+                        <i class="fas fa-box me-2 text-success"></i>
+                        Productos
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'client:cl_list' %}" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Clientes
-                        </p>
+                        <i class="fas fa-user me-2 text-warning"></i>
+                        Clientes
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'user:user_list' %}" class="nav-link">
-                        <i class="nav-icon fas fa-address-card"></i>
-                        <p>
-                            Usuarios
-                        </p>
+                        <i class="fas fa-user me-2 text-danger"></i>
+                        Usuarios
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'sales:sale_list' %}" class="nav-link">
-                        <i class="nav-icon fas fa-shopping-cart"></i>
-                        <p>
-                            Ventas
-                        </p>
+                        <i class="fas fa-shopping-cart me-2 text-info"></i>
+                        Ventas
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'reports:report_sales' %}" class="nav-link">
-                        <i class="nav-icon fas fa-chart-bar"></i>
-                        <p>
-                            Reporte de Ventas
-                        </p>
+                        <i class="fas fa-chart-bar me-2 text-secondary"></i>
+                        Reporte de Ventas
                     </a>
                 </li>
             </ul>
         </nav>
+        
     </div>
 </aside>
