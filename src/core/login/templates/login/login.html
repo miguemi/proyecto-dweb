@@ -1,18 +1,20 @@
 {% extends 'login/base.html' %}
 {% load widget_tweaks %}
 {% block content %}
+{% load static %} 
+<body class="login-box bg bg-image" style="background-image: url('{% static 'img/ventas.png' %}'); background-size: cover; background-repeat: no-repeat; background-position: center;">
     <div class="login-box">
         <div class="login-logo">
-            <a href="{% url 'index' %}">SistemaVentas</a>
+            <a href="{% url 'index' %}" style="color: blue;">Sistema de Ventas</a>
         </div>
-        <div class="card">
-            <div class="card-body login-card-body">
-                <p class="login-box-msg">Inicie sesión con sus credenciales</p>
+        <div class="card card-outline card-primary">
+            <div class="card-body login-card-body rounded" style="border-radius: 30px;">
+                <h4 class="login-box-msg">Inicie sesión con sus credenciales</h4>
                 <form action="" method="post">
                     <input type="hidden" name="next" value="{{ next }}">
                     {% csrf_token %}
                     <div class="input-group mb-3">
-                        {{ form.username|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese su username' }}
+                        {{ form.username|add_class:'form-control' }}
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -20,14 +22,13 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        {{ form.password|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese su password' }}
+                        {{ form.password|add_class:'form-control' }}
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
                     </div>
-                    <hr>
                     <div class="row">
                         <div class="col-lg-12">
                             <button type="submit" class="btn btn-primary btn-block">
@@ -35,10 +36,10 @@
                             </button>
                         </div>
                     </div>
-                    <p class="text-center mt-2" style="font-size: 13px;">
-                        Si no recuerdas tu contraseña puedes resetearla dando click <a href="{% url 'security:reset_password' %}">aqui </a>
-                    </p>
                 </form>
+                <p class="mt-2" style="font-size: 13px; text-align: center;">
+                    ¿Olvidó su contraseña? <a href="{% url 'security:reset_password' %}">Restablecerla aquí</a>
+                </p>
             </div>
         </div>
         <script type="application/javascript">
@@ -53,11 +54,12 @@
                     errors += '{{ error }}\n';
                 {% endfor %}
                 Swal.fire({
-                    title: 'Error!',
+                    title: 'Error',
                     text: errors,
                     icon: 'error'
                 });
             {% endif %}
         </script>
     </div>
+</body>
 {% endblock %}
