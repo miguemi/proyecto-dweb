@@ -26,9 +26,9 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.environ.get("SECRET_KEY", default='django-insecure-%jfg0*gz2yo6m1i+qyyqh)-q6ev@m1v6bvndh*divz16%7iqb+')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("DEBUG", default=1))
-
+DEBUG = os.environ.get('DEBUG', "TRUE") == "TRUE" 
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:80"]
 
 # Application definition
 
@@ -136,7 +136,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
 # guardado de archivos media.
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles/')
 
 # cambiar el modelo del usuario.
 AUTH_USER_MODEL = 'user.User'

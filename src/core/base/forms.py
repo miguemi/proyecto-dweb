@@ -97,7 +97,7 @@ class ClientForm(ModelForm):
             ),
             'dni': TextInput(
                 attrs={
-                    'placeholder': 'Ingrese su dni',
+                    'placeholder': 'Ingrese su DPI',
                 }
             ),
             'date_birthday': DateInput(format='%Y-%m-%d', attrs={

@@ -44,7 +44,7 @@
     <b>FACTURA:</b> {{ sale.id }}<br>
     <b>FECHA DE VENTA:</b> {{ sale.date_joined }}<br>
     <b>CLIENTE:</b> {{ sale.cli.names|upper }}<br>
-    <b>DNI:</b> {{ sale.cli.dni }}<br>
+    <b>DPI:</b> {{ sale.cli.dni }}<br>
 </p>
 <table id="invoice">
     <thead>
@@ -62,21 +62,21 @@
             <td>{{ d.prod.cat.name }}</td>
             <td>{{ d.prod.name }}</td>
             <td class="text-center">{{ d.cant }}</td>
-            <td class="text-center">${{ d.price }}</td>
-            <td style="text-align: right;">${{ d.subtotal }}</td>
+            <td class="text-center">Q{{ d.price }}</td>
+            <td style="text-align: right;">Q{{ d.subtotal }}</td>
         </tr>
     {% endfor %}
     <tr style="border-top: 1px solid black; padding-top: 4px;">
         <td colspan="4"><b>SUBTOTAL</b></td>
-        <td style="text-align: right">${{ sale.subtotal }}</td>
+        <td style="text-align: right">Q{{ sale.subtotal }}</td>
     </tr>
     <tr style="padding-top: 0px;">
         <td colspan="4"><b>IVA 12%</b></td>
-        <td style="text-align: right">${{ sale.iva }}</td>
+        <td style="text-align: right">Q{{ sale.iva }}</td>
     </tr>
     <tr style="padding-top: 0px;">
         <td colspan="4"><b>TOTAL A PAGAR</b></td>
-        <td style="text-align: right">${{ sale.total }}</td>
+        <td style="text-align: right">Q{{ sale.total }}</td>
     </tr>
     </tbody>
 </table>

@@ -72,7 +72,7 @@ const vents = {
                     class: 'text-center',
                     orderable: false,
                     render: function (data, type, row) {
-                        return '$' + parseFloat(data).toFixed(2);
+                        return 'Q' + parseFloat(data).toFixed(2);
                     }
                 },
                 {
@@ -88,7 +88,7 @@ const vents = {
                     class: 'text-center',
                     orderable: false,
                     render: function (data, type, row) {
-                        return '$' + parseFloat(data).toFixed(2);
+                        return 'Q' + parseFloat(data).toFixed(2);
                     }
                 },
             ],
@@ -236,7 +236,7 @@ $(function () {
             const tr = tblProducts.cell($(this).closest('td, li')).index();
             vents.items.products[tr.row].cant = cant;
             vents.calculate_invoice();
-            $('td:eq(5)', tblProducts.row(tr.row).node()).html('$' + vents.items.products[tr.row].subtotal.toFixed(2));
+            $('td:eq(5)', tblProducts.row(tr.row).node()).html('Q' + vents.items.products[tr.row].subtotal.toFixed(2));
         });
 
     $('.btnClearSearch').on('click', function () {
@@ -287,7 +287,7 @@ $(function () {
                     class: 'text-center',
                     orderable: false,
                     render: function (data, type, row) {
-                        return '$' + parseFloat(data).toFixed(2);
+                        return 'Q' + parseFloat(data).toFixed(2);
                     }
                 },
                 {
