@@ -1,17 +1,17 @@
 {% extends 'login/base.html' %}
 
 {% block content %}
-    <div class="login-box">
+    <div class="login-box rounded">
         <div class="login-logo">
-            <a href="{% url 'index' %}">SistemaVentas</a>
+            <a href="{% url 'index' %} "style="color: blue";>SistemaVentas</a>
         </div>
-        <div class="card">
-            <div class="card-body login-card-body">
-                <p class="login-box-msg">Reseteo de contraseña</p>
+        <div class="card rounded">
+            <div class="card-body login-card-body rounded">
+                <h4 class="login-box-msg">Reseteo de contraseña</h4>
                 <form action="" method="post">
                     <input type="hidden" name="next" value="{{ next }}">
                     {% csrf_token %}
-                    <div class="input-group mb-3">
+                    <div class="input-group mb-3 rounded">
                         {{ form.username }}
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -21,15 +21,14 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-lg-12">
-                            <button type="submit" class="btn btn-primary btn-block">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block rounded">
                                 <i class="fas fa-envelope"></i> Enviar
                             </button>
                         </div>
                     </div>
                     <p class="text-center mt-2" style="font-size: 13px;">
-                        Si deseas volver al login da un click <a
-                            href="{% url 'security:login' %}">aqui </a>
+                        Si deseas volver al login, haz clic <a href="{% url 'security:login' %}">aquí</a>.
                     </p>
                 </form>
             </div>
@@ -39,10 +38,10 @@
                 $('form').on('submit', function (e) {
                     e.preventDefault();
                     const parameters = new FormData(this);
-                    submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de resetear tu contraseña?', parameters, function () {
+                    submit_with_ajax(window.location.pathname, 'Notificación', '¿Estás seguro de resetear tu contraseña?', parameters, function () {
                         Swal.fire({
                             title: 'Notificación',
-                            text: 'Se ha enviado un correo electrónico con los pasos a seguir para que pueda resetear su contraseña',
+                            text: 'Se ha enviado un correo electrónico con los pasos a seguir para que puedas resetear tu contraseña',
                             icon: 'success',
                             timer: 5000,
                             onClose: () => {
