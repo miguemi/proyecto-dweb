@@ -6,9 +6,7 @@ src/staticfiles/
 *.pyc
 # Ignore Node.js modules
 node_modules/
-env
+env/
 # Ignore line ending (CRLF/LF) warnings
 package-lock.json
 package.json
-docker-compose.yml
-src/Dockerfile
